@@ -1,3 +1,4 @@
+console.log("API Key:", process.env.OPENAI_API_KEY);
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
@@ -13,6 +14,7 @@ const openai = new OpenAI({
 
 app.post("/chat", async (req, res) => {
   const { message } = req.body;
+  console.log("Received message:", message);
 
   try {
     const response = await openai.chat.completions.create({
@@ -23,8 +25,10 @@ app.post("/chat", async (req, res) => {
       ]
     });
 
+    console.log("OpenAI Response:", response);
     res.json({ reply: response.choices[0].message.content });
   } catch (err) {
+    console.error("OpenAI error:", err);
     res.status(500).json({ error: err.message });
   }
 });
